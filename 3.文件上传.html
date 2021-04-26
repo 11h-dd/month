@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.0.0-beta3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <style>
+        .progress {
+            width: 800px;
+        }
+    </style>
+
+    <body>
+        <input type="file" id="file">
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+
+            </div>
+        </div>
+        <div class="box">
+
+        </div>
+
+        <script>
+            // 1. 获取页面元素
+            var file = document.getElementById('file');
+            var bar = document.querySelector('.progress-bar');
+            var box = document.querySelector('.box');
+            // 2.添加change事件
+            file.addEventListener('change', function() {
+                // 原生js发送ajax请求
+                var formData = new FormData();
+
+                formData.append('attrName', this.files[0]);
+                var xhr = new XMLHttpRequest();
+
+                // axios 实现文件上传
+                // axios({
+                //     method: 'post',
+                //     url:'http://121.5.153.184:3000/upload',
+                //     // 请求参数
+                //     data:formData,
+                //     onUploadProgress: function (ev) {
+                //         var r = (ev.loaded / ev.total) * 100 + '%';
+                //         // 进度条百分比
+                //         bar.style.width = r;
+                //         bar.innerHTML = r;
+                //     },
+                // }).then(res=>{
+                //     console.log(res);
+                //     if (res.status == 200) {
+                //           var path = res.data.path;
+                //           var img = document.createElement('img');
+                //           img.src = path;
+                //           img.onload = function () {
+                //             box.appendChild(img);
+                //           }
+
+                //       }
+                // })
+
+                xhr.upload.onprogress = function(ev) {
+                    // 已上传
+                    // console.log(ev.loaded);
+                    // // 总量
+                    // console.log(ev.total);
+                    var r = (ev.loaded / ev.total) * 100 + '%';
+                    // 进度条百分比
+                    bar.style.width = r;
+                    bar.innerHTML = r;
+                }
+
+                xhr.open('post', 'http://121.5.153.184:3000/upload');
+
+                xhr.send(formData);
+
+                xhr.onload = function() {
+                    if (xhr.status == 200) {
+                        var path = JSON.parse(xhr.responseText).path;
+                        var img = document.createElement('img');
+                        img.src = path;
+                        img.onload = function() {
+                            box.appendChild(img);
+                        }
+
+                    }
+                }
+            })
+        </script>
+    </body>
+
+</html>
