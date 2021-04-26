@@ -63,32 +63,32 @@
                 //       }
                 // })
 
-                // xhr.upload.onprogress = function(ev) {
-                //     // 已上传
-                //     // console.log(ev.loaded);
-                //     // // 总量
-                //     // console.log(ev.total);
-                //     var r = (ev.loaded / ev.total) * 100 + '%';
-                //     // 进度条百分比
-                //     bar.style.width = r;
-                //     bar.innerHTML = r;
-                // }
+                xhr.upload.onprogress = function(ev) {
+                    // 已上传
+                    // console.log(ev.loaded);
+                    // // 总量
+                    // console.log(ev.total);
+                    var r = (ev.loaded / ev.total) * 100 + '%';
+                    // 进度条百分比
+                    bar.style.width = r;
+                    bar.innerHTML = r;
+                }
 
-                // xhr.open('post', 'http://121.5.153.184:3000/upload');
+                xhr.open('post', 'http://121.5.153.184:3000/upload');
 
-                // xhr.send(formData);
+                xhr.send(formData);
 
-                // xhr.onload = function() {
-                //     if (xhr.status == 200) {
-                //         var path = JSON.parse(xhr.responseText).path;
-                //         var img = document.createElement('img');
-                //         img.src = path;
-                //         img.onload = function() {
-                //             box.appendChild(img);
-                //         }
+                xhr.onload = function() {
+                    if (xhr.status == 200) {
+                        var path = JSON.parse(xhr.responseText).path;
+                        var img = document.createElement('img');
+                        img.src = path;
+                        img.onload = function() {
+                            box.appendChild(img);
+                        }
 
-                //     }
-                // }
+                    }
+                }
             })
         </script>
     </body>
